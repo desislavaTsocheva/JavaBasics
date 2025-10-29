@@ -7,6 +7,13 @@ public class ElectricCar extends Car implements Extras {
         this.batteryCapacity = batteryCapacity;
     }
 
+    public ElectricCar(String make, String model, int year, double engineCapacity, double price,
+                       double batteryCapacityKWh, ACType acType, Interior interior, RimType rimType) {
+        super(make, model, year, engineCapacity, price, acType, interior, rimType);
+        this.batteryCapacity = batteryCapacityKWh;
+    }
+
+
     @Override
     public double ecoTax(){
       if(batteryCapacity <=50){
