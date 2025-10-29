@@ -17,23 +17,21 @@ public class Dealership{
         return sum;
     }
 
-    public List<Car> filterByExtra(String category, String value) {
+    public List<Car> filterByExtra(String category) {
         String cat = category.toUpperCase();
-        String val = value.toUpperCase();
         List<Car> result = new ArrayList<>();
 
         for (Car car : cars) {
-            if (cat.equals("AC") && car.getACType().name().equals(val)) {
+            if (category.toUpperCase().equals(car.getACType().toString())) {
                 result.add(car);
-            } else if (cat.equals("INTERIOR") && car.getInterior().name().equals(val)) {
+            } else if (category.equals(car.getInterior().toString())) {
                 result.add(car);
-            } else if (cat.equals("RIMS") && car.getRimType().name().equals(val)) {
+            } else if (category.equals(car.getRimType().toString())) {
                 result.add(car);
             }
         }
         return result;
     }
-
 
     public void listAllCars() {
         for (Car car : cars) {

@@ -25,18 +25,17 @@ public class Main {
         System.out.println("\n=== Filter by Extra ===");
         System.out.print("Choose category (AC / INTERIOR / RIMS): ");
         String category = sc.next();
-        System.out.print("Enter value: ");
-        String value = sc.next();
 
         System.out.println("\nResults:");
-        List<Car> filtered = dealership.filterByExtra(category, value);
+        List<Car> filtered = dealership.filterByExtra(category);
         if (filtered.isEmpty()) System.out.println("No matches found.");
         else filtered.forEach(System.out::println);
     }
 
     private static DieselCar readDieselCar() {
         return new DieselCar(
-                readString("Make"), readString("Model"),
+                readString("Make"),
+                readString("Model"),
                 readInt("Year of production"),
                 readDouble("Engine capacity (ccm)"),
                 readDouble("Price"),
@@ -45,7 +44,8 @@ public class Main {
 
     private static PetrolCar readPetrolCar() {
         return new PetrolCar(
-                readString("Make"), readString("Model"),
+                readString("Make"),
+                readString("Model"),
                 readInt("Year of production"),
                 readDouble("Engine capacity (ccm)"),
                 readDouble("Price"),
@@ -54,7 +54,8 @@ public class Main {
 
     private static ElectricCar readElectricCar() {
         return new ElectricCar(
-                readString("Make"), readString("Model"),
+                readString("Make"),
+                readString("Model"),
                 readInt("Year of production"),
                 0,
                 readDouble("Price"),
@@ -63,16 +64,16 @@ public class Main {
     }
 
 
-    private static String readString(String label) {
-        System.out.print(label + ": ");
-        return sc.next();
-    }
-
     private static int readInt(String label) {
         while (true) {
             System.out.print(label + ": ");
+            String input = sc.nextLine().trim();
             try {
-                return Integer.parseInt(sc.next());
+                int year= Integer.parseInt(input);
+                if(year<1900 || year>2026){
+                    throw new NumberFormatException();
+                }
+                return year;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid number. Try again.");
             }
@@ -82,12 +83,22 @@ public class Main {
     private static double readDouble(String label) {
         while (true) {
             System.out.print(label + ": ");
+            String input = sc.nextLine().trim();
             try {
-                return Double.parseDouble(sc.next());
+                double i= Double.parseDouble(input);
+                if(i<0.0){
+                    throw new NumberFormatException();
+                }
+                return i;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid number. Try again.");
             }
         }
+    }
+
+    private static String readString(String label) {
+        System.out.print(label + ": ");
+        return sc.next();
     }
 
     private static Extras.ACType readAC() {
