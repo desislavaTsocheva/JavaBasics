@@ -5,9 +5,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Reservation {
-    private ArrayList<Car> reservations = new ArrayList<Car>();
+    private ArrayList<Car> reservations = new ArrayList<>();
 
-    public String returnCar() throws IOException {
+    public ArrayList<Car> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(ArrayList<Car> reservations) {
+        this.reservations = reservations;
+    }
+
+    public synchronized String returnCar() throws IOException {
         String reservationId;
         BufferedReader scan = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Enter the car ID: ");
@@ -38,6 +46,7 @@ public class Reservation {
                 car.setOffice(office);
                 car.setDateToreservation(null);
                 car.setDateFromreservation(null);
+                System.out.println("1 success");
                 return reservationId;
             }
             else{
@@ -47,7 +56,7 @@ public class Reservation {
         return null;
     }
 
-    public ArrayList<Car> findCars() throws IOException {
+    public synchronized ArrayList<Car> findCars() throws IOException {
         ArrayList<Car> cars = new ArrayList<>();
         BufferedReader scan = new BufferedReader(new InputStreamReader(System.in));
         String office;
@@ -75,12 +84,11 @@ public class Reservation {
         if (cars.isEmpty()) {
             System.out.println("No such car");
             return null;
-        } else {
-            return cars;
         }
+        return cars;
     }
 
-    public int rentPercent() throws IOException {
+    public synchronized int rentPercent() throws IOException {
         BufferedReader scan = new BufferedReader(new InputStreamReader(System.in));
         LocalDate date;
         System.out.println("Enter the date: ");
@@ -104,16 +112,18 @@ public class Reservation {
         }
     }
 
-    public boolean validDate(LocalDate date) {
+    public synchronized boolean validDate(LocalDate date) {
         for(Car car : reservations) {
-            if(date.isBefore(car.getDateFromreservation())||date.isAfter(car.getDateToreservation())) {
-                return false;
+            if (car.getDateFromreservation() != null && car.getDateToreservation() != null) {
+                if (date.isBefore(car.getDateFromreservation()) || date.isAfter(car.getDateToreservation())) {
+                    reservations.add(car);
+                }
             }
         }
         return true;
     }
 
-    public boolean findId(String reservationId) throws IOException {
+    public synchronized boolean findId(String reservationId) throws IOException {
         for(Car car : reservations) {
             if(car.getId().equalsIgnoreCase(reservationId)) {
                 return true;

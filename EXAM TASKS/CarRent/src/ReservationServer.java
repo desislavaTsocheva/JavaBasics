@@ -3,35 +3,32 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ReservationServer {
-    private int PORT;
-    private Reservation reservation;
 
-    public ReservationServer(int port, Reservation reservation) {
-        this.PORT = port;
-        this.reservation = reservation;
+    private final int PORT;
+    public ReservationServer(int PORT) {
+        this.PORT = PORT;
     }
 
     public void start() {
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+        Reservation res = new Reservation();
+        try {
+            ServerSocket serverSocket = new ServerSocket(PORT);
             System.out.println("Server started on port " + PORT);
 
             while (true) {
                 Socket socket = serverSocket.accept();
-                System.out.println("Client connected");
-
-                ClientHandler clientHandler = new ClientHandler(socket, reservation);
-
+                ClientHandler clientHandler = new ClientHandler(socket, res);
                 new Thread(clientHandler).start();
+                System.out.println("Client connected");
             }
-
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }
 
     public static void main(String[] args) {
-        Reservation reservation = new Reservation();
-        ReservationServer server = new ReservationServer(7777, reservation);
+        int port = 7777;
+        ReservationServer server = new ReservationServer(port);
         server.start();
     }
 }

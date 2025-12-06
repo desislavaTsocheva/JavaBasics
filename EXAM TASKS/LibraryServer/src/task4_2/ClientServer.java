@@ -1,9 +1,10 @@
 package task4_2;
-
-import task4_1.Book;
+//
+//import task4_1.Book;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -70,5 +71,11 @@ public class ClientServer implements Runnable {
             }
             System.out.println("Client disconnected");
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        Socket socket = new Socket("localhost", 5000);
+        ClientServer client = new ClientServer(socket, new Library());
+        client.run();
     }
 }
